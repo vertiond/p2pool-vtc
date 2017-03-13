@@ -430,8 +430,8 @@ class BaseShare(object):
         return dict(header=self.header, txs=[self.check(tracker, other_txs)] + other_txs)
 
 class NewShare(BaseShare):
-    VERSION = 17
-    VOTING_VERSION = 17
+    VERSION = 18
+    VOTING_VERSION = 18
     SUCCESSOR = None
     MAX_NEW_TXS_SIZE = 100000
 
