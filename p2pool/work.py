@@ -6,6 +6,7 @@ import random
 import re
 import sys
 import time
+import binascii
 
 from twisted.internet import defer
 from twisted.python import log
@@ -520,12 +521,14 @@ class WorkerBridge(worker_interface.WorkerBridge):
                 print 'Worker %s submitted share with hash > target:' % (user,)
                 print '    Hash:   %56x' % (pow_hash,)
                 print '    Target: %56x' % (target,)
+                print '    Header: %s' % binascii.hexlify((bitcoin_data.block_header_type.pack(header)),)
                 self.invalid_hashes += 1
             elif header_hash in received_header_hashes:
                 print >>sys.stderr, 'Worker %s submitted share more than once!' % (user,)
             else:
                 received_header_hashes.add(header_hash)
-                
+                print 'YAY!'                
+
                 self.pseudoshare_received.happened(bitcoin_data.target_to_average_attempts(target), not on_time, user)
                 self.recent_shares_ts_work.append((time.time(), bitcoin_data.target_to_average_attempts(target)))
                 while len(self.recent_shares_ts_work) > 50:
