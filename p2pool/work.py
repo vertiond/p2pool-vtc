@@ -528,6 +528,9 @@ class WorkerBridge(worker_interface.WorkerBridge):
             else:
                 received_header_hashes.add(header_hash)
                 print 'YAY!'                
+                print '    Hash:   %56x' % (pow_hash,)
+                print '    Target: %56x' % (target,)
+                print '    Header: %s' % binascii.hexlify((bitcoin_data.block_header_type.pack(header)),)
 
                 self.pseudoshare_received.happened(bitcoin_data.target_to_average_attempts(target), not on_time, user)
                 self.recent_shares_ts_work.append((time.time(), bitcoin_data.target_to_average_attempts(target)))
