@@ -372,7 +372,6 @@ def pubkey_to_script2(pubkey):
 
 def pubkey_hash_to_script2(pubkey_hash, version, net):
     if version == 0:
-        hx = hex(pubkey_hash)[2:-1]
         return '\x00\x14' + hex(pubkey_hash)[2:-1].decode("hex")
     if version == net.SEGWIT_ADDRESS_VERSION:
         return ('\xa9\x14' + pack.IntType(160).pack(pubkey_hash)) + '\x87'
