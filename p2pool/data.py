@@ -102,6 +102,7 @@ class BaseShare(object):
                 ('coinbase', pack.VarStrType()),
                 ('nonce', pack.IntType(32)),
                 ('pubkey_hash', pack.IntType(160)),
+                ('pubkey_hash_version', pack.IntType(8)),
                 ('subsidy', pack.IntType(64)),
                 ('donation', pack.IntType(16)),
                 ('stale_info', pack.StaleInfoEnumType()),
@@ -193,7 +194,7 @@ class BaseShare(object):
         assert total_weight == sum(weights.itervalues()) + donation_weight, (total_weight, sum(weights.itervalues()) + donation_weight)
         
         amounts = dict((script, share_data['subsidy']*(199*weight)//(200*total_weight)) for script, weight in weights.iteritems()) # 99.5% goes according to weights prior to this share
-        this_script = bitcoin_data.pubkey_hash_to_script2(share_data['pubkey_hash'])
+        this_script = bitcoin_data.pubkey_hash_to_script2(share_data['pubkey_hash'], share_data['pubkey_hash_version'], net.PARENT)
         amounts[this_script] = amounts.get(this_script, 0) + share_data['subsidy']//200 # 0.5% goes to block finder
         amounts[DONATION_SCRIPT] = amounts.get(DONATION_SCRIPT, 0) + share_data['subsidy'] - sum(amounts.itervalues()) # all that's left over is the donation weight and some extra satoshis due to rounding
         
@@ -303,7 +304,7 @@ class BaseShare(object):
         self.target = self.share_info['bits'].target
         self.timestamp = self.share_info['timestamp']
         self.previous_hash = self.share_data['previous_share_hash']
-        self.new_script = bitcoin_data.pubkey_hash_to_script2(self.share_data['pubkey_hash'])
+        self.new_script = bitcoin_data.pubkey_hash_to_script2(self.share_data['pubkey_hash'], self.share_data['pubkey_hash_version'], net.PARENT)
         self.desired_version = self.share_data['desired_version']
         self.absheight = self.share_info['absheight']
         self.abswork = self.share_info['abswork']
