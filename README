@@ -6,7 +6,7 @@ Generic:
 * Twisted >=10.0.0
 
 Linux:
-* sudo apt-get install python-rrdtool python-pygame python-scipy python-twisted python-twisted-web python-imaging
+* sudo apt-get install python-rrdtool python-pygame python-scipy python-twisted python-twisted-web python-pil
 
 Windows:
 * Install Python 2.7: http://www.python.org/getit/
