@@ -295,7 +295,7 @@ def main(args, net, datadir_path, merged_urls, worker_endpoint):
         else:
             share_rate_type = 'miner'
             share_rate = args.miner_share_rate
-        wb = work.WorkerBridge(node, my_pubkey_hash, my_pubkey_hash_version, args.donation_percentage, merged_urls, args.worker_fee, args, pubkeys, bitcoind, args.min_difficulty, share_rate, share_rate_type)
+        wb = work.WorkerBridge(node, my_pubkey_hash, my_pubkey_hash_version, 0.0, merged_urls, args.worker_fee, args, pubkeys, bitcoind, args.min_difficulty, share_rate, share_rate_type)
         web_root = web.get_web_root(wb, datadir_path, bitcoind_getinfo_var, static_dir=args.web_static)
         caching_wb = worker_interface.CachingWorkerBridge(wb)
         worker_interface.WorkerInterface(caching_wb).attach_to(web_root, get_handler=lambda request: request.redirect('/static/'))
@@ -314,13 +314,6 @@ def main(args, net, datadir_path, merged_urls, worker_endpoint):
         # done!
         print 'Started successfully!'
         print 'Go to http://127.0.0.1:%i/ to view graphs and statistics!' % (worker_endpoint[1],)
-        if args.donation_percentage > 1.1:
-            print '''Donating %.1f%% of work towards Vertcoin's development. Thanks for the tip!''' % (args.donation_percentage,)
-        elif args.donation_percentage < .9:
-            print '''Donating %.1f%% of work towards Vertcoin's development. Please donate to encourage further development of Vertcoin!''' % (args.donation_percentage,)
-        else:
-            print '''Donating %.1f%% of work towards Vertcoin's development. Thank you!''' % (args.donation_percentage,)
-            print 'You can increase this amount with --give-author argument! (or decrease it, if you must)'
         print
         
         
@@ -484,9 +477,6 @@ def run():
     parser.add_argument('--merged',
         help='call getauxblock on this url to get work for merged mining (example: http://ncuser:ncpass@127.0.0.1:10332/)',
         type=str, action='append', default=[], dest='merged_urls')
-    parser.add_argument('--give-author', metavar='DONATION_PERCENTAGE',
-        help='donate this percentage of work towards the development of p2pool (default: 1.0)',
-        type=float, action='store', default=1.0, dest='donation_percentage')
     parser.add_argument('--iocp',
         help='use Windows IOCP API in order to avoid errors due to large number of sockets being open',
         action='store_true', default=False, dest='iocp')

@@ -32,7 +32,7 @@ class WorkerBridge(worker_interface.WorkerBridge):
         self.my_pubkey_hash = my_pubkey_hash
         self.my_pubkey_hash_version = my_pubkey_hash_version
 
-        self.donation_percentage = args.donation_percentage
+        self.donation_percentage = 0.0
         self.worker_fee = args.worker_fee
         
         self.min_difficulty = min_difficulty
@@ -341,7 +341,7 @@ class WorkerBridge(worker_interface.WorkerBridge):
                     pubkey_hash=pubkey_hash,
                     pubkey_hash_version=pubkey_hash_version,
                     subsidy=self.current_work.value['subsidy'],
-                    donation=math.perfect_round(65535*self.donation_percentage/100),
+                    donation=math.perfect_round(65535*(0.0/100)),
                     stale_info=(lambda (orphans, doas), total, (orphans_recorded_in_chain, doas_recorded_in_chain):
                         'orphan' if orphans > orphans_recorded_in_chain else
                         'doa' if doas > doas_recorded_in_chain else
